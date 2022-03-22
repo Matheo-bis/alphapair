@@ -1,0 +1,7 @@
+.*
+!.gitignore
+/bin
+**/target/**
+**/node_modules/**
+*yarn*
+**/src/main/frontend/build/**
