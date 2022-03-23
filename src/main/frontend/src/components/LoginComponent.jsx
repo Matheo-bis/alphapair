@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import UserService from '../services/UserService';
 import withRouter from './Router';
 
 class LoginComponent extends Component {
@@ -13,10 +14,7 @@ class LoginComponent extends Component {
     }
 
     componentDidMount() {
-        axios.get("http://localhost:8080/api/v1/islogged").then((res) => {
-            if (res.data === 1) // already connected
-                this.props.history('/home');
-        })
+        UserService.userIsLogged(this.props.history);
     }
     
     handleMailChange = (event) => {
@@ -32,7 +30,7 @@ class LoginComponent extends Component {
             mail: this.state.mail,
             password: this.state.password
         };
-        axios.post("http://localhost:8080/api/v1/login", user).then((res) => {
+        /*axios.post("http://localhost:8080/api/v1/login", user).then((res) => {
             if (res.data === 3) { // REPLY_AUTH_ERROR
                 this.props.history('/home');
             } else if (res.data === 2) { // REPLY_DB_ERROR
@@ -46,7 +44,8 @@ class LoginComponent extends Component {
                 //useNavigate()("/home");
                 this.props.history('/home');
             }
-        });
+        });*/
+        UserService.userLogin(user, this.props.history);
     }
 
     render() {

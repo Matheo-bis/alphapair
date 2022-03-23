@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import withRouter from './Router';
+import UserService from '../services/UserService';
 
 
 
@@ -26,9 +27,7 @@ class HomeComponent extends Component {
     }
 
     handleLogout = () => {
-        axios.get("http://localhost:8080/api/v1/logout").then((res) => {
-            this.props.history('/login');
-        });
+        UserService.userLogout(this.props.history);
     }
 
     render() {
