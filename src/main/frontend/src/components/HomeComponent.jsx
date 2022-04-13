@@ -15,7 +15,19 @@ class HomeComponent extends Component {
     }
 
     componentDidMount() {
-        axios.get("http://localhost:8080/api/v1/content").then((res) => {
+        axios.get("http://localhost:8080/api/v1/content")
+        .then((res) => {
+            this.setState({
+                content: res.data
+            });
+        }).catch((err) => {
+            if (err.response) {
+                if (err.response.status == 401) {
+                    this.props.history('/login');
+                }
+            }
+        })
+        /*.then((res) => {
             if (res.data === "") {
                 this.props.history('/login');
             } else {
@@ -23,7 +35,7 @@ class HomeComponent extends Component {
                     content: res.data
                 });
             }
-        });
+        });*/
     }
 
     handleLogout = () => {

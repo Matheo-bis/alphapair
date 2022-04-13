@@ -8,38 +8,54 @@ const LOGOUT_URL = "http://localhost:8080/api/v1/logout";
 
 class UserService {
     userSignup(user, history) {
-        axios.post(SIGNUP_URL, user).then((res) => {
-            if (res.data === Protocol.REPLY_OK) {
-                history("/login");
-            } else if (res.data === Protocol.REPLY_DB_ERROR) {
-                window.location.reload(false);
-            } else if (res.data === Protocol.REPLY_AUTH_ERROR) {
-                history("/home");
+        axios.post(SIGNUP_URL, user)
+        .then(() => {
+            console.log("CODE 200 / OK");
+            history("/login");
+        }).catch((err) => {
+            if (err.response) {
+                if (err.response.data === Protocol.ALREADY_LOGGED_IN) {
+                    console.log("already logged in.");
+                    history("/home");
+                } else if (err.response.data === Protocol.ALREADY_USED_MAIL) {
+                    console.log("mail already used.");
+                    window.location.reload(false);
+                }
+                return err;
             }
         });
     }
 
     userLogin(user, history) {
-        axios.post(LOGIN_URL, user).then((res) => {
-            if (res.data === Protocol.REPLY_OK) {
-                history("/home");
-            } else if (res.data === Protocol.REPLY_DB_ERROR) {
-                window.location.reload(false);
-            } else if (res.data === Protocol.REPLY_AUTH_ERROR) {
-                history("/home");
+        axios.post(LOGIN_URL, user)
+        .then(() => {
+            console.log("CODE 200 / OK");
+            history("/home");
+        }).catch((err) => {
+            if (err.response) {
+                if (err.response.data === Protocol.ALREADY_LOGGED_IN) {
+                    console.log("already logged in.");
+                    history("/home");
+                } else if (err.response.data === Protocol.BAD_CREDENTIALS) {
+                    console.log("wrong credentials.");
+                    window.location.reload(false);
+                }
+                return err;
             }
         });
     }
 
     userIsLogged(history) {
-        axios.get(IS_LOGGED_URL).then((res) => {
-            if (res.data === Protocol.REPLY_OK)
+        axios.get(IS_LOGGED_URL)
+        .then((res) => {
+            if (res.data)
                 history('/home');
-        })
+        });
     }
 
     userLogout(history) {
-        axios.get(LOGOUT_URL).then((res) => {
+        axios.get(LOGOUT_URL)
+        .then(() => {
             history('/login');
         });
     }
