@@ -47,4 +47,10 @@ public class UserController {
 		return us.isLogged();
 	}
 	
+	@GetMapping("/getnewtokens")
+	public ResponseEntity<Object> getNewTokens() {
+		System.out.println("getting new token ...");
+		return us.getNewTokens();
+	}
+	
 }

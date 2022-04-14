@@ -19,12 +19,13 @@ public class TokenManager {
 	public static final String issuer = "AlphaPair";
 	public static final String secret = "Bonjour";
 	public static final Algorithm algorithm = Algorithm.HMAC256(secret);
+	public static final long accessTokenLifespan = 1000 * 5;
 	
-	public static String getUserMailFromAccessToken(String accessToken) throws APIException {
+	public static String getUserMailFromToken(String token) throws APIException {
 		try {
 			DecodedJWT decodedJWT = JWT.require(algorithm)
 					.withIssuer(issuer)
-					.build().verify(accessToken);
+					.build().verify(token);
 			// valid token
 			return decodedJWT.getClaim("mail").toString().replace("\"", ""); // toString() gives "string" instead of string
 		} catch (TokenExpiredException e) {
@@ -42,7 +43,17 @@ public class TokenManager {
 		return JWT.create()
 				.withIssuer(issuer)
 				.withIssuedAt(new Date())
-				//.withExpiresAt(new Date(new Date() + 1000))
+				.withClaim("tokenType", "accessToken")
+				.withExpiresAt(new Date(new Date().getTime() + accessTokenLifespan))
+				.withClaim("mail", user.getMail())
+				.sign(algorithm);
+	}
+	
+	public static String generateRefreshTokenFromUser(User user) {
+		return JWT.create()
+				.withIssuer(issuer)
+				.withIssuedAt(new Date())
+				.withClaim("tokenType", "refreshToken")
 				.withClaim("mail", user.getMail())
 				.sign(algorithm);
 	}

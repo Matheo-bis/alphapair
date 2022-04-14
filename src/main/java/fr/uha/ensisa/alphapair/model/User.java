@@ -24,6 +24,13 @@ public class User {
 		this.mail = mail;
 		this.password = password;
 	}
+	
+	public User(String mail) {
+		this.mail = mail;
+		this.password = null;
+	}
+	
+	// getters / setters
 
 	public String getMail() {
 		return mail;

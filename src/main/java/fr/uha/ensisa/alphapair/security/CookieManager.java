@@ -12,6 +12,7 @@ import fr.uha.ensisa.alphapair.network.Protocol;
 public class CookieManager {
 	
 	public static final String ACCESS_TOKEN_COOKIE_NAME = "access_token";
+	public static final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
 	
 	public static Cookie addAuthCookie(String cookieName, String token) {
 		Cookie cookie = new Cookie(cookieName, token);
@@ -40,10 +41,10 @@ public class CookieManager {
 					return c.getValue();
 				}
 			}
-			System.out.println("missing token !");
+			System.out.println("missing token");
 			throw new APIException(HttpStatus.UNAUTHORIZED, Protocol.MISSING_TOKEN);
 		} else {
-			System.out.println("missing token !");
+			System.out.println("missing token");
 			throw new APIException(HttpStatus.UNAUTHORIZED, Protocol.MISSING_TOKEN);
 		}
 		

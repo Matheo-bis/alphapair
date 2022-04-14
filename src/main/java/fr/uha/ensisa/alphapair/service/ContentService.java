@@ -24,14 +24,30 @@ public class ContentService {
 	
 	
 	public ResponseEntity<Object> getContent() {
+		System.out.println("getting content...");
 		try {
-			String userMail = AuthManager.getLoggedInUserMail(req.getCookies());
+			String userMail = AuthManager.getLoggedInUserMailFromAccessToken(req.getCookies());
 			
-			String content = "Hello " + userMail + " ! Here is your content !";
+			String content = "Hello " + userMail + " from " + req.getRemoteAddr() + " ! Here is your content !";
+			System.out.println("getting content OK");
 			return new ResponseEntity<Object>(content, HttpStatus.OK);
 			//
 		} catch (APIException e) {
+			System.out.println("getting content error : " + e.getResponseEntity().getBody().toString());
 			return e.getResponseEntity();
 		}
 	}
+	
+	/*public ResponseEntity<Object> addPromotion(String name, Date limitDate) {
+		try {
+			String userMail = AuthManager.getLoggedInUserMailFromAccessToken(req.getCookies());
+			// if (userMail is not admin) return ERRORADMIN
+			
+			// traitement....
+			
+		} catch (APIException e) {
+			System.out.println("getting content error : " + e.getResponseEntity().getBody().toString());
+			return e.getResponseEntity();
+		}
+	}*/
 }

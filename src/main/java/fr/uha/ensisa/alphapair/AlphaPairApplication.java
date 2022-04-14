@@ -5,19 +5,19 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
-@RestController
 public class AlphaPairApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(AlphaPairApplication.class, args);
 	}
 	
-	@GetMapping("/hello")
+	/*@GetMapping("/hello")
 	public String hello(
 			@RequestParam(value = "name", defaultValue = "World") String name,
 			HttpServletResponse res
@@ -34,6 +34,6 @@ public class AlphaPairApplication {
 		res.addCookie(cookie);
 		
 		return String.format("Hello %s!", name);
-	}
+	}*/
 
 }
