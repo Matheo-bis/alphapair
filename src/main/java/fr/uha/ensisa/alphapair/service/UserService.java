@@ -33,6 +33,15 @@ public class UserService {
 	@Autowired
 	private HttpServletResponse res;
 	
+	/*@Autowired
+	private TokenManager tm;
+	
+	@Autowired
+	static private AuthManager am;
+	
+	@Autowired
+	static private CookieManager cm;*/
+	
 	public ResponseEntity<Object> userSignup(User user) {
 		try {
 			AuthManager.getLoggedInUserMailFromAccessToken(req.getCookies());

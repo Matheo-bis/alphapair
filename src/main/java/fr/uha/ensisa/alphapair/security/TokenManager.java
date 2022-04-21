@@ -2,7 +2,10 @@ package fr.uha.ensisa.alphapair.security;
 
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -15,9 +18,13 @@ import fr.uha.ensisa.alphapair.model.User;
 import fr.uha.ensisa.alphapair.network.Protocol;
 
 public class TokenManager {
+	
+	/*@Autowired
+	private PropertyManager pm;*/
 
-	public static final String issuer = "AlphaPair";
-	public static final String secret = "Bonjour";
+	//public static final String issuer = /*pm.getProperty("TOKEN_ISSUER");*/"AlphaPair";
+	public static final String issuer = new PropertyManager().getProperty("TOKEN_ISSUER");
+	public static final String secret = new PropertyManager().getProperty("TOKEN_SECRET");
 	public static final Algorithm algorithm = Algorithm.HMAC256(secret);
 	public static final long accessTokenLifespan = 1000 * 5;
 	

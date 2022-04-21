@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import fr.uha.ensisa.alphapair.exception.APIException;
 import fr.uha.ensisa.alphapair.security.AuthManager;
 import fr.uha.ensisa.alphapair.security.CookieManager;
+import fr.uha.ensisa.alphapair.security.PropertyManager;
 
 @Service
 public class ContentService {
@@ -21,7 +22,12 @@ public class ContentService {
 	
 	@Autowired
 	private HttpServletResponse res;
+		
+	/*@Autowired
+	static private PropertyManager pm;*/
 	
+	/*@Autowired
+	static private AuthManager am;*/
 	
 	public ResponseEntity<Object> getContent() {
 		System.out.println("getting content...");

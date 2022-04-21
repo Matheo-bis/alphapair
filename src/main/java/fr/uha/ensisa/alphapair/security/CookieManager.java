@@ -4,7 +4,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 
 import fr.uha.ensisa.alphapair.exception.APIException;
 import fr.uha.ensisa.alphapair.network.Protocol;
