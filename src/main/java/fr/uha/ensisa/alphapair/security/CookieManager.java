@@ -21,6 +21,7 @@ public class CookieManager {
 		cookie.setMaxAge(365 * 24 * 60 * 60); // expires in 1 year
 		cookie.setSecure(true);
 		cookie.setHttpOnly(true);
+		cookie.setDomain("localhost");
 		cookie.setPath("/"); // global cookie accessible every where
 
 		return cookie;
@@ -31,6 +32,7 @@ public class CookieManager {
 		cookie.setMaxAge(0);
 		cookie.setSecure(true);
 		cookie.setHttpOnly(true);
+		cookie.setDomain("localhost");
 		cookie.setPath("/"); // global cookie accessible every where
 
 		return cookie;

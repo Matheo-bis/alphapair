@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import UserService from '../services/UserService';
@@ -28,7 +27,12 @@ class SignupComponent extends Component {
         e.preventDefault();
         const user = {
             mail: this.state.mail,
-            password: this.state.password
+            password: this.state.password,
+            firstName: this.state.mail,
+            lastName: this.state.mail,
+            isAdmin: Math.random() < 0.5,
+            groupId: "",
+            promotionId: ""
         };
         /*axios.post("http://localhost:8080/api/v1/signup", user).then((res) => {
             if (res.data === 3) { // REPLY_AUTH_ERROR

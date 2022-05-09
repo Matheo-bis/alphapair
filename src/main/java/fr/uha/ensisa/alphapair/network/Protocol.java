@@ -14,5 +14,9 @@ public class Protocol {
 	// contenu
 	public static final int NOT_ADMIN_USER 		= 7;
 	public static final int INVALID_ARGUMENT	= 8;
+	public static final int PROMLESS_STUDENT	= 9;
+	public static final int ADMIN_USER			= 10;
+	public static final int SERVER_LOGIC_ERROR	= 11;
+	
 
 }

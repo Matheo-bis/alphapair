@@ -32,7 +32,7 @@ public class ContentService {
 	public ResponseEntity<Object> getContent() {
 		System.out.println("getting content...");
 		try {
-			String userMail = AuthManager.getLoggedInUserMailFromAccessToken(req.getCookies());
+			String userMail = AuthManager.getLoggedInUserMailFromAccessToken(req.getCookies(), true);
 			
 			String content = "Hello " + userMail + " from " + req.getRemoteAddr() + " ! Here is your content !";
 			System.out.println("getting content OK");

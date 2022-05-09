@@ -19,30 +19,28 @@ public class AuthManager {
 	@Autowired
 	private CookieManager cm;*/
 	
-	public static String getLoggedInUserMailFromAccessToken(Cookie[] cookies) throws APIException {
+	public static String getLoggedInUserMailFromAccessToken(Cookie[] cookies, boolean requiresAdmin) throws APIException {
 		
 		String accessToken = CookieManager.getToken(cookies, CookieManager.ACCESS_TOKEN_COOKIE_NAME);
-		String userMail = TokenManager.getUserMailFromToken(accessToken);
+		String userMail = TokenManager.getUserMailFromToken(accessToken, requiresAdmin);
 		return userMail;
 	}
 	
 	public static String getLoggedInUserMailFromRefreshToken(Cookie[] cookies) throws APIException {
 		String refreshToken = CookieManager.getToken(cookies, CookieManager.REFRESH_TOKEN_COOKIE_NAME);
-		String userMail = TokenManager.getUserMailFromToken(refreshToken);
+		String userMail = TokenManager.getUserMailFromToken(refreshToken, false);
 		return userMail;
 	}
 	
 	public static ResponseEntity<Object> isLogged(Cookie[] cookies) {
 		try {
-			AuthManager.getLoggedInUserMailFromAccessToken(cookies);
+			AuthManager.getLoggedInUserMailFromAccessToken(cookies, false);
 			return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
 		} catch (APIException e) {
 			if ((int) e.getResponseEntity().getBody() == Protocol.EXPIRED_TOKEN)
+				// in this "if", we DO are connected, but it's just that our accessToken is expired. 
 				return new ResponseEntity<>(Boolean.TRUE, HttpStatus.OK);
 			return new ResponseEntity<>(Boolean.FALSE, HttpStatus.OK);
 		}
 	}
-
-	
-
 }

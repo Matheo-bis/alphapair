@@ -5,7 +5,15 @@ const Protocol = {
 
 	ALREADY_LOGGED_IN 	: 4,
 	ALREADY_USED_MAIL 	: 5,
-    BAD_CREDENTIALS 	: 6
+    BAD_CREDENTIALS 	: 6,
+
+	NOT_ADMIN_USER		: 7,
+	INVALID_ARGUMENT	: 8,
+	PROMLESS_STUDENT	: 9,
+	ADMIN_USER			: 10,
+	
+	// students
+	UNKNOWN_ID			: "unknown"
 };
 
 export default Protocol;

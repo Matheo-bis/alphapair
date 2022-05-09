@@ -1,10 +1,16 @@
 import axios from "axios";
+import ContentService from "./ContentService";
 import Protocol from "./Protocol";
 
 const SIGNUP_URL = "http://localhost:8080/api/v1/signup";
 const LOGIN_URL = "http://localhost:8080/api/v1/login";
 const IS_LOGGED_URL = "http://localhost:8080/api/v1/islogged";
 const LOGOUT_URL = "http://localhost:8080/api/v1/logout";
+const IS_ADMIN_URL = "http://localhost:8080/api/v1/isadmin";
+const IS_STUDENT_PROMLESS_URL = "http://localhost:8080/api/v1/isstudentpromless";
+const UPDATE_PROMOTION_URL = "http://localhost:8080/api/v1/users/promotion";
+const UPDATE_GROUP_URL = "http://localhost:8080/api/v1/users/group";
+const GET_SELF_URL = "http://localhost:8080/api/v1/users/self";
 
 class UserService {
     userSignup(user, history) {
@@ -53,11 +59,61 @@ class UserService {
         });
     }
 
-    userLogout(history) {
+    userLogout = () => {
         axios.get(LOGOUT_URL)
         .then(() => {
-            history('/login');
+            window.location = "/login";
         });
+    }
+
+    userIsAdmin = (body, callback) => {
+        axios.get(IS_ADMIN_URL)
+        .then((res) => callback(res.data))
+        .catch((err) => {
+            if (err.response) {
+                ContentService.handleError(err.response.data, this.userIsAdmin, callback, null);
+            }
+        })
+    }
+
+    userIsStudentPromless = (body, callback) => {
+        axios.get(IS_STUDENT_PROMLESS_URL)
+        .then((res) => callback(res.data))
+        .catch((err) => {
+            if (err.response) {
+                ContentService.handleError(err.response.data, this.userIsStudentPromless, callback, null);
+            }
+        })
+    }
+
+    userUpdatePromotion = (body, callback) => {
+        axios.put(UPDATE_PROMOTION_URL, body)
+        .then((res) => callback(res.data))
+        .catch((err) => {
+            if (err.response) {
+                ContentService.handleError(err.response.data, this.userUpdatePromotion, callback, body);
+            }
+        })
+    }
+
+    userUpdateGroup = (body, callback) => {
+        axios.put(UPDATE_GROUP_URL, body)
+        .then((res) => callback(res.data))
+        .catch((err) => {
+            if (err.response) {
+                ContentService.handleError(err.response.data, this.userUpdateGroup, callback, body);
+            }
+        })
+    }
+
+    userGetSelf = (body, callback) => {
+        axios.get(GET_SELF_URL)
+        .then((res) => callback(res.data))
+        .catch((err) => {
+            if (err.response) {
+                ContentService.handleError(err.response.data, this.userGetSelf, callback, body);
+            }
+        })
     }
 }
 

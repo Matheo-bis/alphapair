@@ -3,6 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios';
+
+axios.defaults.withCredentials = true; // allows to set cookies in localhost:3000 development environment.
 
 ReactDOM.render(
   <React.StrictMode>

@@ -1,34 +1,34 @@
 import React, { Component } from 'react';
-import withRouter from './Router';
 import UserService from '../services/UserService';
-import ContentService from '../services/ContentService'; 
+import AdminHomeComponent from './admin/AdminHomeComponent';
+import BufferComponent from './BufferComponent';
+import withRouter from './Router';
+import StudentHomeComponent from './student/StudentHomeComponent';
 
 class HomeComponent extends Component {
     
     constructor(props) {
         super(props);
         this.state = {
-            content: "default"
+            isAdmin: null
         }
     }
 
     componentDidMount() {
-        ContentService.getContent(
-            (res) => this.setState({content: res})
+        UserService.userIsAdmin(
+            null,
+            (res) => this.setState({isAdmin: res})
         );
-    }
-
-    handleLogout = () => {
-        UserService.userLogout(this.props.history);
     }
 
     render() {
-        return (
-            <div>
-                {this.state.content}
-                <button onClick={this.handleLogout}>Logout</button>
-            </div>
-        );
+        if (this.state.isAdmin != null) {
+            if (this.state.isAdmin)
+                return <AdminHomeComponent/>
+            else
+                return <StudentHomeComponent/>
+        } else
+            return <BufferComponent/>
     }
 }
 

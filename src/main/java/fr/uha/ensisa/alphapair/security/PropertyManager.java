@@ -14,7 +14,11 @@ public class PropertyManager {
 	
 	private Properties props;
 	
+	public static final String ANSI_RESET = "\u001B[0m";
+	public static final String ANSI_YELLOW = "\u001B[33m";
+	
 	public PropertyManager() {
+		System.out.println(ANSI_YELLOW + "New PropertyManager instance created." + ANSI_RESET);
 		try {
 			props = new Properties();
 			String propsFileName = "application.properties";
