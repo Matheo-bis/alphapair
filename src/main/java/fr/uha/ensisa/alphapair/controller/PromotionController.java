@@ -22,33 +22,33 @@ public class PromotionController {
 	@Autowired
 	public PromotionService ps;
 	
-	@CrossOrigin
 	@PostMapping("/promotions")
 	public ResponseEntity<Object> addPromotion(@RequestBody String rawPromotion) {
 		return ps.addPromotion(rawPromotion);
 	}
 	
-	@CrossOrigin
 	@GetMapping("/promotions/{id}")
 	public ResponseEntity<Object> getPromotion(@PathVariable String id) {
 		return ps.getPromotion(id);
 	}
 	
-	@CrossOrigin
 	@GetMapping("/promotions")
 	public ResponseEntity<Object> getAllPromotions() {
 		return ps.getAllPromotions();
 	}
 	
-	@CrossOrigin
 	@PutMapping("/promotions/{id}")
 	public ResponseEntity<Object> updatePromotionField(@PathVariable String id, @RequestBody String rawPromotionUpdate) {
 		return ps.updatePromotionField(id, rawPromotionUpdate);
 	}
 	
-	@CrossOrigin
 	@DeleteMapping("/promotions/{id}")
 	public ResponseEntity<Object> deletePromotion(@PathVariable String id) {
 		return ps.deletePromotion(id);
+	}
+	
+	@PutMapping("/promotions/{id}/assignment")
+	public ResponseEntity<Object> generatePromotionAssignment(@PathVariable String id) {
+		return ps.generatePromotionAssignment(id);
 	}
 }

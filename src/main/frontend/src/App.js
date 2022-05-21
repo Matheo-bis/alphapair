@@ -7,6 +7,7 @@ import AdminPromotionPairsComponent from './components/admin/AdminPromotionPairs
 import AdminPromotionStudentsComponent from './components/admin/AdminPromotionStudentsComponent';
 import AdminPromotionSubjectsComponent from './components/admin/AdminPromotionSubjectsComponent';
 import AdminStudentsComponent from './components/admin/AdminStudentsComponent';
+import UITestComponent from './components/admin/UITestComponent';
 import HomeComponent from './components/HomeComponent';
 import LoginComponent from './components/LoginComponent';
 import RoleFilter from './components/RoleFilter';
@@ -100,7 +101,7 @@ function App() {
             element={
               <RoleFilter
                 adminRequired={true}
-                component={AdminStudentsComponent}
+                component={UITestComponent}
               />
             }
           />

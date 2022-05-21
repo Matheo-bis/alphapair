@@ -56,6 +56,16 @@ class PromotionService {
             }
         });
     }
+
+    getNewAssignment = (promotionId, callback) => {
+        axios.put(PROMOTIONS_URL + "/" + promotionId +  "/assignment")
+        .then((res) => callback(res.data))
+        .catch((err) => {
+            if (err.response) {
+                ContentService.handleError(err.response.data, this.getNewAssignment, callback, promotionId);
+            }
+        });
+    }
 }
 
 export default new PromotionService();

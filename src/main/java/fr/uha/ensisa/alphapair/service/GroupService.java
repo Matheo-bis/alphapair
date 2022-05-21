@@ -71,6 +71,37 @@ public class GroupService {
 			return new ResponseEntity<Object>(Protocol.INVALID_ARGUMENT, HttpStatus.BAD_REQUEST);
 		}
 	}
+
+	public ResponseEntity<Object> setGroupLocked(String id, String isLockedRaw) {
+		try {
+			// checking that user is properly connected
+			String userMail = AuthManager.getLoggedInUserMailFromAccessToken(req.getCookies(), false);
+			
+			// if so, get the user infos from the database
+			User user = ur.findUserByMail(userMail).get(0);
+			
+			JsonNode json = new ObjectMapper().readTree(isLockedRaw);
+			
+			boolean isLocked = json.get("isLocked").asBoolean();
+			
+			if (user.getIsAdmin()) { // an admin wants to change a group's isLocked status
+				gr.setGroupLocked(id, isLocked);
+				return new ResponseEntity<Object>(null, HttpStatus.OK);
+			}
+				
+			else  { // an student wants to change his group's isLocked status
+				gr.setGroupLocked(user.getGroupId(), isLocked);
+				return new ResponseEntity<Object>(null, HttpStatus.OK);
+			}
+				
+
+		} catch (APIException e) {
+			return e.getResponseEntity();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Object>(Protocol.INVALID_ARGUMENT, HttpStatus.BAD_REQUEST);
+		}
+	}
 	
 	
 }

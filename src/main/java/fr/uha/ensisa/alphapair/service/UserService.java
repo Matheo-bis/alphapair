@@ -66,6 +66,8 @@ public class UserService {
 				return new ResponseEntity<Object>(Protocol.ALREADY_USED_MAIL, HttpStatus.UNAUTHORIZED);
 			}
 			
+			user.setIsAdmin(false); // make sure the student is not admin
+			
 			// else, proceed to signup
 			ur.save(user);
 			return new ResponseEntity<Object>(HttpStatus.OK);

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PromotionService from '../../services/PromotionService';
-import UserService from '../../services/UserService';
 import withRouter from '../Router';
 
 class AdminHomeComponent extends Component {

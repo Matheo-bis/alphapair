@@ -18,6 +18,7 @@ import fr.uha.ensisa.alphapair.network.Protocol;
 import fr.uha.ensisa.alphapair.repository.SubjectRepository;
 import fr.uha.ensisa.alphapair.repository.UserRepository;
 import fr.uha.ensisa.alphapair.security.AuthManager;
+import fr.uha.ensisa.alphapair.service.logic.SubjectLogic;
 
 @Service
 public class SubjectService {
@@ -29,6 +30,9 @@ public class SubjectService {
 	public SubjectRepository sr;
 	
 	@Autowired
+	public SubjectLogic sl;
+	
+	@Autowired
 	private HttpServletRequest req;
 	
 	@Autowired
@@ -38,15 +42,13 @@ public class SubjectService {
 		try {
 			String userMail = AuthManager.getLoggedInUserMailFromAccessToken(req.getCookies(), false);
 			User user = ur.findUserByMail(userMail).get(0);
-			List<Subject> promotionSubjects;
 			
 			if (user.getIsAdmin()) { // if user is an admin
-				promotionSubjects = sr.findSubjectsByPromotion(id);
-				return new ResponseEntity<Object>(promotionSubjects, HttpStatus.OK);
+				return sl.getPromotionSubjects(id);
+				
 			} else { // if user is not admin, grant access only to his current promotion subjects if defined.
 				if (user.getPromotionId() != "") { // student is part of a promotion. give him his infos.
-					promotionSubjects = sr.findSubjectsByPromotion(user.getPromotionId());
-					return new ResponseEntity<Object>(promotionSubjects, HttpStatus.OK);
+					return sl.getPromotionSubjects(user.getPromotionId());
 				} else { // the student is not part of any promotion.
 					return new ResponseEntity<Object>(Protocol.PROMLESS_STUDENT, HttpStatus.BAD_REQUEST);
 				}

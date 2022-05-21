@@ -35,9 +35,9 @@ class RoleFilter extends Component {
                 const Component = this.props.component;
                 return (
                     <div>
-                        <Box sx={{ display: 'flex' }}>
+                        <Box style={{backgroundColor: "#fafbfb"}} sx={{ display: 'flex' }}>
                             <HeaderComponent/>
-                            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+                            <Box component="main" sx={{ flexGrow: 1, p: 3, paddingTop: 1.5, paddingLeft: 2 }}>
                                 <Toolbar/>
                                 <div className="container">
                                     <Component params={this.props.params}/>

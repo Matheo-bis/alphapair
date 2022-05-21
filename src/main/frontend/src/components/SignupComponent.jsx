@@ -30,7 +30,7 @@ class SignupComponent extends Component {
             password: this.state.password,
             firstName: this.state.mail,
             lastName: this.state.mail,
-            isAdmin: Math.random() < 0.5,
+            isAdmin: false,
             groupId: "",
             promotionId: ""
         };

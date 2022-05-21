@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,4 +28,11 @@ public interface GroupRepository extends JpaRepository<Group, String> {
 	@Modifying
 	@Query("DELETE FROM Group g WHERE g.promotionId = ?1")
 	void deletePromotionGroups(String id);
+
+	@Transactional 
+	@Modifying
+	@Query("UPDATE Group SET isLocked=?2 WHERE id=?1")
+	void setGroupLocked(String groupId, boolean isLocked);
+
+	
 }

@@ -56,6 +56,15 @@ public class GroupLogic {
 					ArrayNode jsonGroupMembers = mapper.createArrayNode();
 					
 					List<User> groupUsers = ur.findUserByGroupId(group.getId());
+					
+					// sorting group users alphabetically
+					groupUsers.sort((u1, u2) ->
+						(u1.getLastName() + " " + u1.getFirstName()).compareTo(
+							u2.getLastName() + " " + u2.getFirstName()
+						)
+					);
+
+					
 					for (User user : groupUsers) {
 						ObjectNode jsonGroupUser = jsonGroupMembers.addObject();
 						jsonGroupUser.put("mail", user.getMail());
@@ -75,6 +84,5 @@ public class GroupLogic {
 			return new ResponseEntity<Object>(Protocol.INVALID_ARGUMENT, HttpStatus.BAD_REQUEST);
 		}
 	}
-
 	
 }

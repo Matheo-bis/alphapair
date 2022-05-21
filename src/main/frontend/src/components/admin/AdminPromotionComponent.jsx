@@ -49,7 +49,6 @@ class AdminPromotionComponent extends Component {
 
     render() {
         if (this.state.remainingRequests === 0) {
-            console.log(this.state.subjects);
             return (
                 <div>
                     <div>

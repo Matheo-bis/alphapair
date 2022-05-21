@@ -8,6 +8,7 @@ import axios from 'axios';
 
 axios.defaults.withCredentials = true; // allows to set cookies in localhost:3000 development environment.
 
+
 ReactDOM.render(
   <React.StrictMode>
     <App />

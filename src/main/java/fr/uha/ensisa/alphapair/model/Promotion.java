@@ -18,8 +18,6 @@ public class Promotion {
 
 	// attributes
 	@Id
-	@GenericGenerator(name = IDGenerator.generatorName, strategy = "fr.uha.ensisa.alphapair.model.IDGenerator")
-    @GeneratedValue(generator = IDGenerator.generatorName)
 	@Column(name = "id")
 	private String id;
 	
