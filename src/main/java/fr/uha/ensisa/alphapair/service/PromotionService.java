@@ -2,6 +2,7 @@ package fr.uha.ensisa.alphapair.service;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -112,6 +113,106 @@ public class PromotionService {
 			}
 			
 			return new ResponseEntity<Object>(p.getId(), HttpStatus.OK);
+		
+		} catch (APIException e) {
+			return e.getResponseEntity();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Object>(Protocol.INVALID_ARGUMENT, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	// creates a mock promotion for testing purposes.
+	public ResponseEntity<Object> populatePromotion() {
+		try {
+			// checking if an user is logged and is admin
+			AuthManager.getLoggedInUserMailFromAccessToken(req.getCookies(), true);
+			
+			// getting the promotion id.
+			char[] chars = "abcdefghijklmnopqrstuvwxyzABSDEFGHIJKLMNOPQRSTUVWXYZ1234567890".toCharArray();
+			int idLength = 6;
+			
+			// generating the mock promotion id
+	    	boolean alreadyExists = true;
+	    	Random r = new Random(System.currentTimeMillis());
+	    	char[] id = new char[idLength];
+	    	
+	    	while (alreadyExists) {
+	    		for (int i = 0;  i < idLength;  i++) {
+	        	    id[i] = chars[r.nextInt(chars.length)];
+	        	}
+	    		
+	    		// checking wether the generated id already exists or not
+	    		if (pr.findPromotionById(new String(id)).size() == 0)
+	    			alreadyExists = false;
+	    	}
+	    	
+	    	String promotionId = new String(id); // we now have generated the mock promotion id
+			
+			// creating promotion
+	    	Promotion p = new Promotion(
+	    			"class" + promotionId,
+	    			"2025-01-01",
+	    			true,
+	    			new ArrayList<String>());
+	    	
+	    	p.setId(new String(id)); 
+			p = pr.save(p);
+			
+			// creating subjects
+			
+			int subjectsNumber = 10;
+			List<String> subjectIds = new ArrayList<>(); // will store the ids of the generated subjects.
+			
+			for (int i = 0 ; i < subjectsNumber ; i++) {
+				String stringI = String.valueOf(i);
+				Subject s = new Subject(stringI + "-Subject no. " + stringI, "Prof no." + stringI, "Desc no." + stringI, promotionId);
+				subjectIds.add(sr.save(s).getId()); // saving the subject and saving his returned id. 
+			}
+			
+			// creating groups
+			
+			int groupsNumber = subjectsNumber;
+			int userIndex = 0; 
+			
+			for (int i = 0 ; i < groupsNumber ; i++) {
+				
+				// will store the choices of the group
+				List<String> groupChoices = new ArrayList<>();
+
+				
+				List<Integer> subjectIndexes = new ArrayList<Integer>();
+		        for (int j = 0; j < subjectsNumber; j++) subjectIndexes.add(j);
+		        Collections.shuffle(subjectIndexes);
+		        
+		        // adding random subjects to the group choices
+		        for (int j = 0 ; j < 3 ; j++) {
+		        	groupChoices.add(subjectIds.get(subjectIndexes.get(j)));
+		        }
+				
+				// creating the group
+				Group g = new Group(promotionId, false, groupChoices);
+				String groupId = gr.save(g).getId();
+				
+				// creating the group users : we want to add either 1 or 2 users for more variety.
+				if (i % 2 == 0) { // add 1 user to the group
+					String userName = "user" + promotionId + "-" + String.valueOf(userIndex);  
+					User user = new User(userName, "user", userName, userName, false, groupId, promotionId);
+					ur.save(user);
+					userIndex++;
+				} else { // add 2 user to the group
+					for (int j = 0 ; j < 2 ; j++) {
+						String userName = "user" + promotionId + "-" + String.valueOf(userIndex);  
+						User user = new User(userName, "user", userName, userName, false, groupId, promotionId);
+						ur.save(user);
+						userIndex++;
+					}
+				}
+						
+				
+			}
+			
+			return new ResponseEntity<Object>(promotionId, HttpStatus.OK);
 		
 		} catch (APIException e) {
 			return e.getResponseEntity();
@@ -255,6 +356,8 @@ public class PromotionService {
 			return new ResponseEntity<Object>(Protocol.INVALID_ARGUMENT, HttpStatus.BAD_REQUEST);
 		}
 	}
+
+	
 	
 	
 }

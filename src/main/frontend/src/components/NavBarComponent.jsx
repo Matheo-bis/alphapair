@@ -1,9 +1,9 @@
 import { DarkMode, Logout, Settings } from '@mui/icons-material';
-import FactCheckIcon from '@mui/icons-material/FactCheck';
-import { AppBar, Avatar, Divider, IconButton, ListItemIcon, Menu, MenuItem, Switch, Toolbar, Tooltip, Typography } from '@mui/material';
+import { AppBar, Avatar, Divider, IconButton, ListItemIcon, Menu, MenuItem, Stack, Switch, Toolbar, Tooltip, Typography } from '@mui/material';
 import React, { Component } from 'react';
+import alphapair_white from "../assets/alphapair_white.svg";
 import UserService from '../services/UserService';
-import alphapair_white from "../assets/alphapair_white.svg"
+import { getAvatarColorFromName } from '../styles/style';
 
 class NavBarComponent extends Component {
 
@@ -33,11 +33,12 @@ class NavBarComponent extends Component {
         return (
             <AppBar style={{backgroundColor: "#5865F2", position: "fixed", overflow: "hidden", userSelect: "none"}} sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
                 <Toolbar>
-                    <img src={alphapair_white} style={{height: "30px", marginRight: 10}}/>
+                    <img alt="alphapair icon" src={alphapair_white} style={{height: "30px", marginRight: 10}}/>
 
                     <Typography variant="h6" noWrap component="div" style={{fontFamily: "dm-700", fontSize: 25}}>
                         {"alphapair"}
                     </Typography>
+                    <span style={{margin: "auto"}}>Add a search bar here ?</span>
                     <Tooltip title="Mon compte">
                         <IconButton
                             onClick={this.handleClick}
@@ -46,9 +47,14 @@ class NavBarComponent extends Component {
                             aria-controls={Boolean(anchorEl) ? "account-menu" : undefined}
                             aria-haspopup="true"
                             aria-expanded={Boolean(anchorEl) ? "true" : undefined}
-                            style={{marginLeft: "auto"}}
+                            style={{marginLeft: "0"}}
                         >
-                        <Avatar>M</Avatar>
+                        <Avatar 
+                            sx={{ bgcolor: getAvatarColorFromName(this.state.user.firstName)}}
+                            style={{fontFamily: "dm-400"}}
+                        >
+                            {(this.state.user.firstName[0] + this.state.user.lastName[0]).toUpperCase()}
+                        </Avatar>
                         </IconButton>
                     </Tooltip>
                     <Menu
@@ -86,28 +92,37 @@ class NavBarComponent extends Component {
                         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
                         >
                         <MenuItem style={{ pointerEvents: 'none' }}>
-                            <Avatar/>
-                            <div>{this.state.user.firstName} {this.state.user.lastName}</div>
+                            <Stack direction="column" style={{margin: "auto"}}>
+                                <Avatar 
+                                    sx={{ bgcolor: getAvatarColorFromName(this.state.user.firstName)}}
+                                    style={{fontFamily: "dm-400", width: "56px", height: "56px", margin: "auto"}}
+                                >
+                                    {(this.state.user.firstName[0] + this.state.user.lastName[0]).toUpperCase()}
+                                </Avatar>
+
+                                <span style={{marginTop: 5, fontFamily: "dm-700"}}>{this.state.user.firstName} {this.state.user.lastName}</span>
+                            </Stack>
+                            
                         </MenuItem>
                         <Divider />
                         <MenuItem style={{"height": "50px"}}>
                             <ListItemIcon>
-                            <DarkMode fontSize="small" />
+                                <DarkMode fontSize="small" />
                             </ListItemIcon>
-                            Thème sombre
+                            <span style={{fontFamily: "dm-400"}}>Thème sombre</span>
                             <Switch/>
                         </MenuItem>
                         <MenuItem style={{"height": "50px"}}>
                             <ListItemIcon>
                             <Settings fontSize="small" />
                             </ListItemIcon>
-                            Paramètres du compte
+                            <span style={{fontFamily: "dm-400"}}>Paramètres du compte</span>
                         </MenuItem>
                         <MenuItem style={{"height": "50px"}} onClick={this.handleLogout}>
                             <ListItemIcon>
                             <Logout fontSize="small" />
                             </ListItemIcon>
-                            Se déconnecter
+                            <span style={{fontFamily: "dm-400"}}>Se déconnecter</span>
                         </MenuItem>
                     </Menu>
                     

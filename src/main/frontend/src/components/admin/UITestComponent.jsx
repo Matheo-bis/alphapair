@@ -1,10 +1,10 @@
-import { ArrowForward, ContentCopy, DarkMode, Delete, DriveFileRenameOutline, DriveFileRenameOutlineRounded, Home, MoreHoriz, Settings } from '@mui/icons-material';
+import { ArrowForward, ContentCopy, Delete, DriveFileRenameOutlineRounded, Home, MoreHoriz } from '@mui/icons-material';
 import { Avatar, AvatarGroup, Breadcrumbs, Button, ButtonGroup, Divider, Fab, Grid, IconButton, Link, ListItemIcon, Menu, MenuItem, Stack, Tooltip, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/system';
 import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import styles from '../../styles/style';
+import { styles } from '../../styles/style';
 import BaseCard from '../BaseCard';
 import withRouter from '../Router';
 
@@ -130,11 +130,11 @@ const UITestComponent = () => {
                                             </AvatarGroup>
                                             
                                         </Stack>
-                                        <Button className={classes.blue_card} variant="contained" style={{padding: 0, marginTop: 5}}>
+                                        <Button className={classes.blue_card} variant="contained" style={{padding: 0, marginTop: 5, height: 40}}>
                                             <RouterLink to="/home" style={{textDecoration: "none", color: "white"}}>Gérer les étudiants</RouterLink>
-                                            <IconButton style={{pointerEvents: "none", paddingRight: 0, color: "white"}}>
-                                                <ArrowForward/>
-                                            </IconButton>
+                                            
+                                                <ArrowForward style={{pointerEvents: "none", paddingRight: 0, color: "white"}}/>
+                                            
                                         </Button>
                                     </Stack>
                                     

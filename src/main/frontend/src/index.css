@@ -28,6 +28,15 @@ code {
   url("./fonts/DMSans-Regular.ttf") format("truetype");
 }
 
+::-webkit-scrollbar {
+  visibility: hidden;
+  width: 0;
+}
+
+* {
+  font-family: "dm-400";
+}
+
 /*::-webkit-scrollbar {
   width: 20px;
   overflow: auto;

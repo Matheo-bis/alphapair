@@ -1,3 +1,4 @@
+import { Button } from '@mui/material';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PromotionService from '../../services/PromotionService';
@@ -31,6 +32,11 @@ class AdminHomeComponent extends Component {
             <div>
                 List of all promotions :
                 <Link to="/create">Create a new class...</Link>
+                <Button onClick={
+                    () => PromotionService.populatePromotion(null, (res) => window.location = "/class/" + res)
+                }>
+                    Create a random promotion
+                </Button>
                 <table className="table">
                     <thead>
                         <tr>

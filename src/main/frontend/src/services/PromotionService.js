@@ -14,6 +14,16 @@ class PromotionService {
         })
     }
 
+    populatePromotion = (promotion, callback) => {
+        axios.post(PROMOTIONS_URL + "/populate")
+        .then((res) => callback(res.data))
+        .catch((err) => {
+            if (err.response) {
+                ContentService.handleError(err.response.data, this.populatePromotion, callback, null);
+            }
+        })
+    }
+
     getPromotion = (promotionId, callback) => {
         axios.get(PROMOTIONS_URL + "/" + promotionId)
         .then((res) => callback(res.data))

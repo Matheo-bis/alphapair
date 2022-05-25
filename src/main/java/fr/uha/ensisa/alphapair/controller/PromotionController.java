@@ -27,6 +27,11 @@ public class PromotionController {
 		return ps.addPromotion(rawPromotion);
 	}
 	
+	@PostMapping("/promotions/populate")
+	public ResponseEntity<Object> populatePromotion() {
+		return ps.populatePromotion();
+	}
+	
 	@GetMapping("/promotions/{id}")
 	public ResponseEntity<Object> getPromotion(@PathVariable String id) {
 		return ps.getPromotion(id);

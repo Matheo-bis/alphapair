@@ -1,7 +1,27 @@
-import { hover } from "@testing-library/user-event/dist/hover";
-
 const blue = "#5865F2";
 const hover_blue = "#7983f5";
+
+const avatar_colors = [
+    "#FFB900",
+    "#D83B01",
+    "#B50E0E",
+    "#E81123",
+    "#B4009E",
+    "#5C2D91",
+    "#0078D7",
+    "#00B4FF",
+    "#008272",
+    "#107C10"
+];
+
+const getAvatarColorFromName = (string) => {
+    var sum = 0;
+    
+    for (let i = 0 ; i < string.length ; i++) {
+        sum += string.charCodeAt(i);
+    }
+    return avatar_colors[sum % avatar_colors.length];
+}
 
 const styles = {
     blue_card: {
@@ -49,7 +69,12 @@ const styles = {
             backgroundColor: hover_blue
         },
 
-    }
+    },
+    
 }
 
-export default styles;
+//export default {styles, getAvatarColorFromName};
+module.exports = {
+    styles,
+    getAvatarColorFromName 
+}

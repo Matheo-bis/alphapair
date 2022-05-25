@@ -102,6 +102,12 @@ public class PromotionLogic {
 		}
 		
 		// we now have a complete costMatrix that we can work with.
+		for (int i = 0 ; i < matrixSize ; i++) {
+			for (int j = 0 ; j < matrixSize ; j++) {
+				System.out.print(costMatrix[i][j] + " ");
+			}
+			System.out.println();
+		}
 		
 		// first, we get the new assignment based-off taht costMatrix using the AssignmentManager generate static method.
 		int[] assignment = AssignmentManager.generate(costMatrix);
