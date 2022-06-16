@@ -1,4 +1,4 @@
-import { Groups, Help, Home, Info, School } from '@mui/icons-material';
+import { FormatListNumbered, Group, Groups, Help, Home, Info, JoinInner, School, Subject } from '@mui/icons-material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { CssBaseline, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -18,15 +18,25 @@ const menu = [
         to: "/home"
     },
     {
-        name: "Classes",
-        icon: School,
-        to: "/classes"
+        name: "Projets",
+        icon: Subject,
+        to: "/projects"
     },
     {
-        name: "Étudiants",
-        icon: Groups,
-        to: "/students"
-    }
+        name: "Groupes",
+        icon: Group,
+        to: "/groups"
+    },
+    {
+        name: "Vœux",
+        icon: FormatListNumbered,
+        to: "/wishes"
+    },
+    {
+        name: "Répartition",
+        icon: JoinInner,
+        to: "/pairs"
+    },
 ]
 
 const bottomMenu = [
@@ -34,17 +44,16 @@ const bottomMenu = [
         name: "À propos",
         icon: Info,
         to: "/about"
+        
     }
 ]
 
 const isPathName = (string) => {
-    if (string === "/classes") {
-        return window.location.pathname.startsWith("/class");
-    }
-    return window.location.pathname.startsWith(string);
+    if (string === "/classes") return true;
+    return window.location.pathname === string;
 }
 
-const AdminHeaderComponent = (props) => {
+const StudentHeaderComponent = (props) => {
     const classes = useStyles();
 
     return (
@@ -104,4 +113,4 @@ const AdminHeaderComponent = (props) => {
     )
 }
 
-export default AdminHeaderComponent;
+export default StudentHeaderComponent;

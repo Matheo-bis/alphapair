@@ -11,6 +11,7 @@ const IS_STUDENT_PROMLESS_URL = "http://localhost:8080/api/v1/isstudentpromless"
 const UPDATE_PROMOTION_URL = "http://localhost:8080/api/v1/users/promotion";
 const UPDATE_GROUP_URL = "http://localhost:8080/api/v1/users/group";
 const GET_SELF_URL = "http://localhost:8080/api/v1/users/self";
+const GET_ALL_STUDENTS_URL = "http://localhost:8080/api/v1/users/students";
 
 class UserService {
     userSignup(user, history) {
@@ -112,6 +113,16 @@ class UserService {
         .catch((err) => {
             if (err.response) {
                 ContentService.handleError(err.response.data, this.userGetSelf, callback, body);
+            }
+        })
+    }
+
+    userGetAllStudents = (body, callback) => {
+        axios.get(GET_ALL_STUDENTS_URL)
+        .then((res) => callback(res.data))
+        .catch((err) => {
+            if (err.response) {
+                ContentService.handleError(err.response.data, this.userGetAllStudents, callback, body);
             }
         })
     }

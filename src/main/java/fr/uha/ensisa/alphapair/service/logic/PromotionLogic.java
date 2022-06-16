@@ -16,6 +16,7 @@ import fr.uha.ensisa.alphapair.network.Protocol;
 import fr.uha.ensisa.alphapair.repository.GroupRepository;
 import fr.uha.ensisa.alphapair.repository.PromotionRepository;
 import fr.uha.ensisa.alphapair.repository.UserRepository;
+import fr.uha.ensisa.alphapair.service.PromotionService;
 import fr.uha.ensisa.alphapair.service.SubjectService;
 
 @Service
@@ -101,16 +102,56 @@ public class PromotionLogic {
 			 
 		}
 		
+		System.out.println("\n Cost matrix : \n");
 		// we now have a complete costMatrix that we can work with.
 		for (int i = 0 ; i < matrixSize ; i++) {
 			for (int j = 0 ; j < matrixSize ; j++) {
-				System.out.print(costMatrix[i][j] + " ");
+				System.out.print((int) costMatrix[i][j] + " ");
 			}
 			System.out.println();
 		}
 		
-		// first, we get the new assignment based-off taht costMatrix using the AssignmentManager generate static method.
-		int[] assignment = AssignmentManager.generate(costMatrix);
+		// getting the current assignment, if defined.
+		Promotion p = pr.findPromotionById(id).get(0);
+		int[] currentAssignment = new int[matrixSize];
+		
+		List<String> currentAssignmentList = p.getAssignment();
+		if (currentAssignmentList.size() == 0) {
+			currentAssignment = null;
+		} else {
+			for (int i = 0 ; i < currentAssignmentList.size() ; i++) {
+				for (int j = 0 ; j < sortedSubjects.size() ; j++) {
+					if (currentAssignmentList.get(i).equals(sortedSubjects.get(j).getId())) {
+						currentAssignment[i] = j;
+					}
+				}
+			}
+		}
+		
+		// PRINTING CURRENT ASSIGNMENT
+		if (currentAssignment == null) {
+			System.out.println("\n Current Assignment : null \n");
+		} else {
+			System.out.print("\n Current Assignment : [");
+			for (int index : currentAssignment) {
+				System.out.print(index + ", ");
+			}
+			System.out.println("] \n");
+		}
+		
+		
+		// first, we get the new assignment based-off that costMatrix using the AssignmentManager generate static method.
+		int[] assignment = AssignmentManager.generate(costMatrix, currentAssignment);
+		
+		
+		// PRINTING NEW ASSIGNMENT
+		System.out.print("\n New Assignment : [");
+		for (int index : assignment) {
+			System.out.print(index + ", ");
+		}
+		System.out.println("] \n");
+				
+		
 		
 		// then, we turn this assignment into a List<String> listAssignment such that, for each index i :
 		// listAssignment.get(i) is exactly sortedSubjects.get( assignment[i] ).getId()
@@ -122,12 +163,23 @@ public class PromotionLogic {
 		
 		// then, we update the current promotion's assignment field with this listAssignment object.
 		//pr.updatePromotionAssignment(id, listAssignment);
-		Promotion p = pr.findPromotionById(id).get(0);
+		
 		p.setAssignment(listAssignment);
 		pr.save(p);
 		
 		// then return the newly generated assignment.
 		return new ResponseEntity<Object>(listAssignment, HttpStatus.OK);
 	}
+
+	public ResponseEntity<Object> getPromotionStudents(String id) {
+		List<User> promotionStudents = ur.getPromotionStudents(id);
+		// we do not want to send the password to the frontend.
+		for (User student : promotionStudents) {
+			student.setPassword("");
+		}
+		return new ResponseEntity<Object>(promotionStudents, HttpStatus.OK);
+	}
+
+
 
 }

@@ -7,6 +7,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 
 axios.defaults.withCredentials = true; // allows to set cookies in localhost:3000 development environment.
+axios.defaults.baseURL = "http://localhost:8080/api/v1/";
 
 
 ReactDOM.render(

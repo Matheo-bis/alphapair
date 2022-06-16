@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import withRouter from '../Router';
 
-class AdminPromotionSubjectsComponent extends Component {
+class AdminPromotionSubjectsComponentBeta extends Component {
 
     constructor(props) {
         super(props);
@@ -19,4 +19,4 @@ class AdminPromotionSubjectsComponent extends Component {
     }
 }
 
-export default withRouter(AdminPromotionSubjectsComponent);
+export default withRouter(AdminPromotionSubjectsComponentBeta);

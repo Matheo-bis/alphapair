@@ -72,7 +72,18 @@ class PromotionService {
         .then((res) => callback(res.data))
         .catch((err) => {
             if (err.response) {
-                ContentService.handleError(err.response.data, this.getNewAssignment, callback, promotionId);
+                //ContentService.handleError(err.response.data, this.getNewAssignment, callback, promotionId);
+                console.log(err);
+            }
+        });
+    }
+
+    getPromotionStudents = (promotionId, callback) => {
+        axios.get("/promotions/" + promotionId +  "/students")
+        .then((res) => callback(res.data))
+        .catch((err) => {
+            if (err.response) {
+                ContentService.handleError(err.response.data, this.getPromotionStudents, callback, promotionId);
             }
         });
     }

@@ -31,9 +31,13 @@ const styles = {
             backgroundColor: hover_blue,
             cursor: "pointer"
         },
+        '&:disabled': {
+            opacity: "0.2",
+            cursor: "pointer"
+        },
         textTransform: "none",
         fontFamily: "dm-400",
-        fontSize: 15
+        fontSize: 15,
     },
     white_card: {
         backgroundColor: "white",
@@ -70,7 +74,12 @@ const styles = {
         },
 
     },
-    
+    title_link: {
+        fontSize: 20,
+        "&:hover": {
+            textDecoration: "underline"
+        },
+    }
 }
 
 //export default {styles, getAvatarColorFromName};

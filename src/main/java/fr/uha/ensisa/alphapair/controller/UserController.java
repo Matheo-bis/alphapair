@@ -80,4 +80,9 @@ public class UserController {
 		return us.getSelfInfo();
 	}
 	
+	@GetMapping("/users/students")
+	public ResponseEntity<Object> getAllStudents() {
+		return us.getAllStudents();
+	}
+	
 }

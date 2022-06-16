@@ -1,11 +1,19 @@
-import { Lock, LockOpen } from '@mui/icons-material';
-import { Button, Card, CardContent, CardHeader, Grid, IconButton, Typography } from '@mui/material';
+import { GroupAdd, GroupRemove, Groups, Help, Lock, LockOpen } from '@mui/icons-material';
+import { Alert, Avatar, Breadcrumbs, CardContent, Grid, IconButton, Link, Snackbar, Tooltip, Typography } from '@mui/material';
 import React, { Component } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import GroupService from '../../services/GroupService';
 import Protocol from '../../services/Protocol';
 import UserService from '../../services/UserService';
+import { getAvatarColorFromName } from '../../styles/style';
+import AlphapairButton from '../AlphapairButton';
+import BaseCard from '../BaseCard';
 import BufferComponent from '../BufferComponent';
 import withRouter from '../Router';
+
+const LinkBehavior = React.forwardRef((props, ref) => {
+    return <RouterLink ref={ref} to={props.href} {...props} />
+});
 
 class StudentGroupsComponent extends Component {
     
@@ -15,7 +23,8 @@ class StudentGroupsComponent extends Component {
         this.state = {
             groups: [],
             user: null,
-            remainingRequests: 2
+            remainingRequests: 2,
+            open: {group: 0, action: 0} // action 1 : enter a group, action 2 : leave a group, action 3 : lock, action 4 : unlock
         }
     }
 
@@ -30,11 +39,14 @@ class StudentGroupsComponent extends Component {
 
         UserService.userGetSelf(
             null,
-            (res) => this.setState({
+            (res) => {
+                console.log(res);
+                this.setState({
                 user: res,
                 remainingRequests: this.state.remainingRequests - 1
-            })
-        );
+                })}
+            );
+        
     }
 
     handleJoinGroup = (groupId, index) => {
@@ -57,15 +69,21 @@ class StudentGroupsComponent extends Component {
                 });
 
                 if (groupId !== "") {
+                    this.setState({open: {group: index + 1, action: 1}});
                     // adding the user to its new group
+                    console.log("user to be added : ");
+                    console.log(user);
+
                     groups[index].members.push(
                         {
-                            mail: this.state.user.mail,
-                            name: `${this.state.user.lastName} ${this.state.user.firstName}`
+                            mail: user.mail,
+                            firstName: user.firstName,
+                            lastName: user.lastName
                         }
-                    )
-                    
+                    )                    
                     groups[index].members.sort((u1, u2) => (u1.name > u2.name) ? 1 :( (u1.name < u2.name) ? -1 : 0));
+                } else {
+                    this.setState({open: {group: index + 1, action: 2}});
                 }
 
                 this.setState({
@@ -88,12 +106,15 @@ class StudentGroupsComponent extends Component {
         GroupService.setGroupLocked(
             body,
             () => {
+
+
                 let groups = this.state.groups.slice();
 
                 groups[index].isLocked = isLocked;
 
                 this.setState({
-                    groups: groups
+                    groups: groups,
+                    open: {group: index + 1, action: isLocked ? 3 : 4}
                 });
             }
         )
@@ -109,60 +130,124 @@ class StudentGroupsComponent extends Component {
     }
 
     render() {
-        if (this.state.remainingRequests === 0)
+        if (this.state.remainingRequests === 0) {
           return (
-            <Grid
-                container
-                spacing={0}
-                alignItems="center"
-                justify="center"
-                
-                
-                
-                style={{margin:"auto"}}
-            >
-                {
-                    this.state.groups.map((group, index) =>
-                        <Card key={group.id} style={{height: "200px", width: "250px", margin: "5px"}}>
-                            <CardHeader
-                                title={`Groupe ${index + 1}`}
-                                action={
-                                    group.members.map(member => member.mail).includes(this.state.user.mail) ?
-                                    <IconButton onClick={group.isLocked ?
-                                        () => this.handleSetGroupLocked(group.id, false, index) :
-                                        () => this.handleSetGroupLocked(group.id, true, index)
-                                        }
-                                    >
-                                      {
-                                          group.isLocked ?
-                                          <Lock/> :
-                                          <LockOpen/>
-                                      }
-                                    </IconButton> 
-                                    : null
-                                  }
-                            />
-                            <CardContent>
-                                {
-                                    group.members.map(member =>
-                                        <Typography key={member.mail}>
-                                            {member.name}
-                                        </Typography>
-                                    )
+            <div>
+                <Grid container>
+                    <Grid item xs={11} lg={11}>
+                        <Breadcrumbs separator=">">
+                            <Link component={LinkBehavior} underline="hover" color="inherit" href="/home">
+                                Accueil
+                            </Link>
+                            <Typography>{"Groupes"}</Typography>
+                        </Breadcrumbs>
+                        <Typography style={{fontFamily: "dm-700", fontSize: 30}}>Liste des groupes</Typography>
+                    </Grid>
+            
+                    <Grid container spacing={0}>
+                        {
+                            this.state.groups.map((group, index) => 
+                            <Grid key={group.id} item xs={12} lg={4}>
+                                <BaseCard 
+                                    rightEl={
+                                            
+                                            group.members.map(member => member.mail).includes(this.state.user.mail) ?
+                                            <span>
+                                            <Tooltip title={group.isLocked ? "Déverouiller le groupe" : "Verrouiller le groupe"}>
+                                            <IconButton style={{marginLeft: "0"}} onClick={group.isLocked ?
+                                                () => this.handleSetGroupLocked(group.id, false, index) :
+                                                () => this.handleSetGroupLocked(group.id, true, index)
+                                                }
+                                            >
+                                              {
+                                                  group.isLocked ?
+                                                  <Lock/> :
+                                                  <LockOpen/>
+                                              }
+                                              
+                                            </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title="Un groupe verouillé empêche quiconque de rentrer ou de sortir du groupe. Cela permet d'éviter qu'un élève malveillant ne sabote les vœux des autres groupes.">
+                                            <Help></Help>
+                                            </Tooltip>
+                                            </span>
+                                            : <IconButton style={{pointerEvents: "none"}}><Lock style={{visibility: "hidden", }}></Lock></IconButton>
+                                    } 
+                                    icon={Groups}
+                                    title={"Groupe " + (index + 1)}
+                                    style={{height: "230px"}}
+                                >
+                                    <CardContent>
+                                        <div style={{height: "100px"}}>
+                                            {
+                                                group.members.map((member, member_index) =>
+                                                <div style={{display: "flex", marginTop: 10}}>
+                                                    <Avatar 
+                                                        sx={{ bgcolor: getAvatarColorFromName(member.firstName)}}
+                                                        style={{fontFamily: "dm-400"}}
+                                                    >
+                                                        {(member.firstName[0] + member.lastName[0]).toUpperCase()}
+                                                    </Avatar>
+                                                    <Typography key={member.mail} style={{marginTop: 10, marginLeft: 10, fontFamily: "dm-700", textOverflow: "ellipsis", color: member.mail === this.state.user.mail ? "#5865F2" : ""}}>
+                                                        {member.firstName + " " + member.lastName}
+                                                    </Typography>
+                                                </div>
+                                                )
 
-                                }
-                                {
-                                    group.members.map(member => member.mail).includes(this.state.user.mail) ?
-                                    <Button disabled={group.isLocked} variant="outlined" onClick={() => this.handleJoinGroup("", index)}>Quitter le groupe</Button> :
-                                    <Button disabled={group.isLocked || (this.state.user.groupId !== "" && this.isGroupLockedById(this.state.user.groupId))} variant="outlined" onClick={() => this.handleJoinGroup(group.id, index)}>Rejoindre ce groupe</Button>
-                                }
-                                {/*<Button variant="outlined" onClick={() => this.handleJoinGroup(group.id, index)}>Rejoindre ce groupe</Button>*/}
-                            </CardContent>
-                        </Card>    
-                    )
-                }
-            </Grid>
-        )
+                                            }
+                                        </div>
+                                        {
+                                            group.members.map(member => member.mail).includes(this.state.user.mail) ?
+                                            <Tooltip style={{margin:"auto"}} title="Quitter le groupe" placement="left" arrow >
+                                                <AlphapairButton
+                                                    variant="outlined" onClick={() => this.handleJoinGroup("", index)} disabled={group.isLocked}
+                                                    style={{marginLeft: "10%"}}
+                                                >
+                                                    <Typography style={{color: "white"}}>Quitter le groupe</Typography>
+                                                    <GroupRemove style={{color: "white", marginLeft: 10}}/>
+                                                </AlphapairButton>
+
+                                            </Tooltip> :
+                                            <Tooltip style={{margin:"auto"}} title="Rejoindre ce groupe" placement="left" arrow >
+                                                <AlphapairButton
+                                                    variant="normal" onClick={() => this.handleJoinGroup(group.id, index)}
+                                                    disabled={group.isLocked || (this.state.user.groupId !== "" && this.isGroupLockedById(this.state.user.groupId)) || (this.state.user.groupId !== group.id && group.members.length === 2)}
+                                                    style={{marginLeft: "10%"}}
+                                                >
+                                                    <Typography style={{color: "white"}}>Rejoindre ce groupe</Typography>
+                                                    <GroupAdd style={{color: "white", marginLeft: 10}}/>
+                                                </AlphapairButton>
+                                            </Tooltip>
+                                        }
+                                    </CardContent>
+                                </BaseCard>
+                                <Snackbar open={this.state.open.group === (index + 1) && this.state.open.action === 1} autoHideDuration={2000} onClose={() => this.setState({open: {group: 0, action: 0}})}>
+                                    <Alert onClose={() => this.setState({open: {group: 0, action: 0}})} severity="success" sx={{ width: '100%' }}>
+                                    Vous avez rejoint le groupe {index + 1}.
+                                    </Alert>
+                                </Snackbar>
+                                <Snackbar open={this.state.open.group === (index + 1) && this.state.open.action === 2} autoHideDuration={2000} onClose={() => this.setState({open: {group: 0, action: 0}})}>
+                                    <Alert onClose={() => this.setState({open: {group: 0, action: 0}})} severity="success" sx={{ width: '100%' }}>
+                                    Vous avez quitté le groupe {index + 1}.
+                                    </Alert>
+                                </Snackbar>
+                                <Snackbar open={this.state.open.group === (index + 1) && this.state.open.action === 3} autoHideDuration={2000} onClose={() => this.setState({open: {group: 0, action: 0}})}>
+                                    <Alert onClose={() => this.setState({open: {group: 0, action: 0}})} severity="success" sx={{ width: '100%' }}>
+                                    Vous avez verrouillé votre groupe.
+                                    </Alert>
+                                </Snackbar>
+                                <Snackbar open={this.state.open.group === (index + 1) && this.state.open.action === 4} autoHideDuration={2000} onClose={() => this.setState({open: {group: 0, action: 0}})}>
+                                    <Alert onClose={() => this.setState({open: {group: 0, action: 0}})} severity="success" sx={{ width: '100%' }}>
+                                    Vous avez déverrouillé votre groupe.
+                                    </Alert>
+                                </Snackbar>
+                            </Grid>
+                        )}
+                    </Grid>
+                </Grid>
+            </div>
+            
+        ) }
         else return <BufferComponent/>
     }
 }

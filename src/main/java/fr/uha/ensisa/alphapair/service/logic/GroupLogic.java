@@ -68,7 +68,8 @@ public class GroupLogic {
 					for (User user : groupUsers) {
 						ObjectNode jsonGroupUser = jsonGroupMembers.addObject();
 						jsonGroupUser.put("mail", user.getMail());
-						jsonGroupUser.put("name", user.getLastName() + " " + user.getFirstName());
+						jsonGroupUser.put("firstName", user.getFirstName());
+						jsonGroupUser.put("lastName", user.getLastName());
 					}
 					
 					jsonGroup.set("members", jsonGroupMembers);

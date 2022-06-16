@@ -72,7 +72,8 @@ public class PromotionService {
 			
 			Promotion p = new Promotion(promotionName, promotionLimitDate, promotionIsStudentEditable, new ArrayList<String>());
 
-			char[] chars = "abcdefghijklmnopqrstuvwxyzABSDEFGHIJKLMNOPQRSTUVWXYZ1234567890".toCharArray();
+			//char[] chars = "abcdefghijklmnopqrstuvwxyzABSDEFGHIJKLMNOPQRSTUVWXYZ1234567890".toCharArray();
+			char[] chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789".toCharArray();
 			int idLength = 6;
 			
 	    	boolean alreadyExists = true;
@@ -129,7 +130,8 @@ public class PromotionService {
 			AuthManager.getLoggedInUserMailFromAccessToken(req.getCookies(), true);
 			
 			// getting the promotion id.
-			char[] chars = "abcdefghijklmnopqrstuvwxyzABSDEFGHIJKLMNOPQRSTUVWXYZ1234567890".toCharArray();
+			//char[] chars = "abcdefghijklmnopqrstuvwxyzABSDEFGHIJKLMNOPQRSTUVWXYZ1234567890".toCharArray();
+			char[] chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789".toCharArray();
 			int idLength = 6;
 			
 			// generating the mock promotion id
@@ -151,7 +153,7 @@ public class PromotionService {
 			
 			// creating promotion
 	    	Promotion p = new Promotion(
-	    			"class" + promotionId,
+	    			"Projets 3A IR 2022-2023",
 	    			"2025-01-01",
 	    			true,
 	    			new ArrayList<String>());
@@ -166,9 +168,12 @@ public class PromotionService {
 			
 			for (int i = 0 ; i < subjectsNumber ; i++) {
 				String stringI = String.valueOf(i);
-				Subject s = new Subject(stringI + "-Subject no. " + stringI, "Prof no." + stringI, "Desc no." + stringI, promotionId);
+				Subject s = new Subject(stringI + "-Projet " + (i + 1), "Prof no." + stringI, "Desc no." + stringI, promotionId);
 				subjectIds.add(sr.save(s).getId()); // saving the subject and saving his returned id. 
 			}
+			
+			// getting the promotion id.
+			char[] userChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
 			
 			// creating groups
 			
@@ -196,14 +201,35 @@ public class PromotionService {
 				
 				// creating the group users : we want to add either 1 or 2 users for more variety.
 				if (i % 2 == 0) { // add 1 user to the group
-					String userName = "user" + promotionId + "-" + String.valueOf(userIndex);  
-					User user = new User(userName, "user", userName, userName, false, groupId, promotionId);
+					
+					char[] userF = new char[idLength];
+					char[] userL = new char[idLength];
+					for (int j = 0;  j < idLength;  j++) {
+						userF[j] = userChars[r.nextInt(userChars.length)];
+						userL[j] = userChars[r.nextInt(userChars.length)];
+		        	}
+					
+					String userFString = new String(userF);
+					String userLString = new String(userL);
+					
+				  
+					User user = new User(userFString + "." + userLString, "user", userFString, userLString, false, groupId, promotionId);
 					ur.save(user);
 					userIndex++;
 				} else { // add 2 user to the group
 					for (int j = 0 ; j < 2 ; j++) {
-						String userName = "user" + promotionId + "-" + String.valueOf(userIndex);  
-						User user = new User(userName, "user", userName, userName, false, groupId, promotionId);
+						
+						char[] userF = new char[idLength];
+						char[] userL = new char[idLength];
+						for (int k = 0;  k < idLength;  k++) {
+							userF[k] = userChars[r.nextInt(userChars.length)];
+							userL[k] = userChars[r.nextInt(userChars.length)];
+			        	}
+						
+						String userFString = new String(userF);
+						String userLString = new String(userL);
+						  
+						User user = new User(userFString + "." + userLString, "user", userFString, userLString, false, groupId, promotionId);
 						ur.save(user);
 						userIndex++;
 					}
@@ -329,13 +355,14 @@ public class PromotionService {
 			
 			if (user.getIsAdmin()) { // if user is an admin
 				
-				p = pr.findPromotionById(id).get(0); // we just do this to check that the promotion does exist.
+				pr.getById(id); // we just do this to check that the promotion does exist.
 				return pl.generatePromotionAssignment(id);
 				
 			} else { // if user is not admin, grant access only to his current promotion if defined.
 				
 				if (user.getPromotionId() != "") { // student is part of a promotion.
 					 p = pr.findPromotionById(user.getPromotionId()).get(0);
+					 System.out.println("ISSTUDENTEDITABLE : " + p.getIsStudentEditable());
 					
 					if (p.getIsStudentEditable() /* &&  date limite ok && cooldown OK*/) {
 						return pl.generatePromotionAssignment(user.getPromotionId());
@@ -343,6 +370,33 @@ public class PromotionService {
 					} else {
 						return new ResponseEntity<Object>(Protocol.SERVER_LOGIC_ERROR, HttpStatus.FORBIDDEN);
 					}
+
+				} else { // the student is not part of any promotion.
+					return new ResponseEntity<Object>(Protocol.PROMLESS_STUDENT, HttpStatus.BAD_REQUEST);
+				}
+			}
+			
+		} catch (APIException e) {
+			return e.getResponseEntity();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Object>(Protocol.INVALID_ARGUMENT, HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	public ResponseEntity<Object> getPromotionStudents(String id) {
+		try {
+			String userMail = AuthManager.getLoggedInUserMailFromAccessToken(req.getCookies(), false);
+			User user = ur.findUserByMail(userMail).get(0);
+			Promotion p;
+			
+			if (user.getIsAdmin()) { // if user is an admin
+				pr.getById(id); // we just do this to check that the promotion does exist.
+				return pl.getPromotionStudents(id);
+
+			} else { // if user is not admin, grant access only to his current promotion if defined.
+				if (user.getPromotionId() != "") { // student is part of a promotion. give him his infos.
+					return pl.getPromotionStudents(user.getPromotionId());
 
 				} else { // the student is not part of any promotion.
 					return new ResponseEntity<Object>(Protocol.PROMLESS_STUDENT, HttpStatus.BAD_REQUEST);

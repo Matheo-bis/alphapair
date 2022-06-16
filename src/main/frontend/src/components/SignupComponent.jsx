@@ -1,6 +1,9 @@
+import { CssBaseline, Stack, Toolbar } from '@mui/material';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import UserService from '../services/UserService';
+import alphapair_blue from "../assets/alphapair_blue.svg";
+import NavBarComponent from './NavBarComponent';
 import withRouter from './Router';
 
 class SignupComponent extends Component {
@@ -34,33 +37,32 @@ class SignupComponent extends Component {
             groupId: "",
             promotionId: ""
         };
-        /*axios.post("http://localhost:8080/api/v1/signup", user).then((res) => {
-            if (res.data === 3) { // REPLY_AUTH_ERROR
-                this.props.history('/home');
-            } else if (res.data === 2) { // REPLY_DB_ERROR
-
-                this.setState({
-                    mail: "",
-                    password: ""
-                });
-            } else if (res.data === 1) { // REPLY_OK
-                this.props.history('/login');
-            }
-        });*/
         UserService.userSignup(user, this.props.history);
     }
 
     render() {
         return (
+            
             <div>
-                <span>This is the signup page !</span>
-                <form onSubmit={this.handleSubmit}>
-                    <input type="text" id="mail" name="mail" onChange={this.handleMailChange} required/>
-                    <input type="text" id="password" name="password" onChange={this.handlePasswordChange} required/>
+                <CssBaseline/>
+                <NavBarComponent user={null}/>
+                <Toolbar/>
+                <Stack orientation="column">
+                    <span style={{margin: "auto", fontSize: 20, marginTop: 10}}>Bienvenue sur la plateforme</span>
+                    <span style={{margin: "auto", display:"flex", marginTop: 1}}>
+                        <img alt="alphapair icon" src={alphapair_blue} style={{marginTop: 15, height: "65px", marginRight: 10}}/>
+                        <span style={{marginLeft: 10, fontFamily: "dm-700", color: "#5865F2", fontSize: 60}}>alphapair</span>
+                    </span>
+                    
+                    <span style={{margin: "auto", fontSize: 40, marginTop: 80, fontFamily: "dm-700"}}>Inscription</span>
+                    <form style={{margin: "auto"}} onSubmit={this.handleSubmit}>
+                        <input type="text" id="mail" name="mail" onChange={this.handleMailChange} required/>
+                        <input style={{marginLeft: 10}} type="input" id="password" name="password" onChange={this.handlePasswordChange} required/>
 
-                    <input type="submit" value="Submit"></input>
-                </form>
-                <span>Already have an account ? <Link to="/login">Login !</Link></span>
+                        <input style={{marginLeft: 10}} type="submit" value="Inscription"></input>
+                    </form>
+                    <span style={{margin: "auto",marginTop: 10}}>Déjà un compte ? <Link to="/login">Se connecter</Link></span>
+                </Stack>
             </div>
         );
     }

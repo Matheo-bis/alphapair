@@ -22,6 +22,9 @@ public interface UserRepository extends JpaRepository<User, String> {
 	@Query("SELECT u FROM User u WHERE u.groupId = ?1")
     List<User> findUserByGroupId(String groupId);
 	
+	@Query("SELECT u FROM User u WHERE u.promotionId = ?1")
+    List<User> getPromotionStudents(String promotionId);
+	
 	@Transactional 
 	@Modifying
 	@Query("UPDATE User SET groupId=?2 WHERE mail=?1")
@@ -36,4 +39,8 @@ public interface UserRepository extends JpaRepository<User, String> {
 	@Modifying
 	@Query("UPDATE User SET promotionId='' WHERE promotionId=?1")
 	void ejectPromotionUsers(String id);
+
+	@Query("SELECT u FROM User u WHERE u.isAdmin = false")
+	List<User> findAllStudents();
+	
 }

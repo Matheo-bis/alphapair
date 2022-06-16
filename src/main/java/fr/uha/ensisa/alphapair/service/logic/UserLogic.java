@@ -94,5 +94,28 @@ public class UserLogic {
 		}
 		
 	}
+
+	public ResponseEntity<Object> updateUserPromotion(User student, String promotionId) {
+		System.out.println(	"sending student with mail " + student.getMail()
+							+ " to promotion with id " + promotionId
+		);
+		// if current and target promotions are the same, do nothing
+		if (student.getPromotionId().equals(promotionId)) {
+			return new ResponseEntity<Object>(null, HttpStatus.OK);
+		}
+		
+		// before changing promotion, we have to check if the student was in a locked group
+		if (!student.getGroupId().equals("")) { // if so, unlock the group
+			Group group = gr.findGroupById(student.getGroupId()).get(0);
+			if (group.getIsLocked()) {
+				gr.setGroupLocked(student.getGroupId(), false);
+			}
+		}
+		
+		ur.updateUserPromotion(student.getMail(), promotionId); // actually changing student's promotion
+		ur.updateUserGroup(student.getMail(), ""); // resetting the group
+		
+		return new ResponseEntity<Object>(null, HttpStatus.OK);		
+	}
 	
 }

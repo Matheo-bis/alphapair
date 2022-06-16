@@ -1,15 +1,17 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
+import AboutComponent from './components/AboutComponent';
 import AdminAddPromotionComponent from './components/admin/AdminAddPromotionComponent';
+import AdminListPromotionsComponent from './components/admin/AdminListPromotionsComponent';
 import AdminPromotionComponent from './components/admin/AdminPromotionComponent';
 import AdminPromotionGroupsComponent from './components/admin/AdminPromotionGroupsComponent';
 import AdminPromotionPairsComponent from './components/admin/AdminPromotionPairsComponent';
 import AdminPromotionStudentsComponent from './components/admin/AdminPromotionStudentsComponent';
 import AdminPromotionSubjectsComponent from './components/admin/AdminPromotionSubjectsComponent';
 import AdminStudentsComponent from './components/admin/AdminStudentsComponent';
-import UITestComponent from './components/admin/UITestComponent';
 import HomeComponent from './components/HomeComponent';
 import LoginComponent from './components/LoginComponent';
+
 import RoleFilter from './components/RoleFilter';
 import SignupComponent from './components/SignupComponent';
 import StudentChoicesComponent from './components/student/StudentChoicesComponent';
@@ -27,6 +29,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginComponent/>}/>
           <Route path="/signup" element={<SignupComponent/>}/>
+          <Route path="/about" element={<AboutComponent/>}/>
 
           <Route
             path="/home"
@@ -48,6 +51,15 @@ function App() {
               <RoleFilter
                 adminRequired={true}
                 component={AdminAddPromotionComponent}
+              />
+            }
+          />
+          <Route
+            path='/classes'
+            element={
+              <RoleFilter
+                adminRequired={true}
+                component={AdminListPromotionsComponent}
               />
             }
           />
@@ -88,7 +100,7 @@ function App() {
             }
           />
           <Route
-            path='/class/:id/subjects'
+            path='/class/:id/projects'
             element={
               <RoleFilter
                 adminRequired={true}
@@ -101,7 +113,7 @@ function App() {
             element={
               <RoleFilter
                 adminRequired={true}
-                component={UITestComponent}
+                component={AdminStudentsComponent}
               />
             }
           />
@@ -128,7 +140,7 @@ function App() {
             }
           />
           <Route
-            path='/subjects'
+            path='/projects'
             element={
               <RoleFilter
                 adminRequired={false}
@@ -137,7 +149,7 @@ function App() {
             }
           />
           <Route
-            path='/choices'
+            path='/wishes'
             element={
               <RoleFilter
                 adminRequired={false}

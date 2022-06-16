@@ -85,7 +85,7 @@ public class AssignmentManager {
 		return cost;
 	}
 	
-	public static int[] generate(double[][] costMatrix) {
+	public static int[] generate(double[][] costMatrix, int[] currentAssignment) {
 		
 		// this list will store all the known optimal solutions to the problem.
 		List<int[]> solutions = new ArrayList<>();
@@ -140,9 +140,24 @@ public class AssignmentManager {
 		}
 		
 		// finally, choose a random solution between all found ones and return it.
-		return solutions.get(
-				new Random().nextInt(solutions.size())
-		);
+		// if possible, the chosen solution must be different from the current assignment.
+		if (currentAssignment == null || solutions.size() == 1) {
+			
+			System.out.println(solutions.size());
+			System.out.println(currentAssignment);
+			
+			return solutions.get(
+					new Random().nextInt(solutions.size())
+			);
+		} else {
+			int[] chosenNewAssignment = solutions.get(
+					new Random().nextInt(solutions.size()));
+			while (Arrays.equals(chosenNewAssignment, currentAssignment)) {
+				chosenNewAssignment = solutions.get(
+						new Random().nextInt(solutions.size()));
+			}
+			return chosenNewAssignment;
+		}
 		
 	}
 }

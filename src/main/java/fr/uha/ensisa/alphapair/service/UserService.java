@@ -230,23 +230,30 @@ public class UserService {
 			// if so, get the user infos from the database
 			User user = ur.findUserByMail(userMail).get(0);
 			
-			// cannot assign a promotion to an admin
-			if (user.getIsAdmin())
-				return new ResponseEntity<Object>(Protocol.ADMIN_USER, HttpStatus.UNAUTHORIZED);
-			
 			JsonNode json = new ObjectMapper().readTree(rawPromotionId);
-			
 			String promotionId = json.get("promotionId").asText();
 			
 			// cannot assign a non-existing promotion to the user
 			if (pr.findPromotionById(promotionId).size() == 0 && promotionId != "") // id="" : leave current prom
 				return new ResponseEntity<Object>(Protocol.INVALID_ARGUMENT, HttpStatus.BAD_REQUEST);
 			
-			ur.updateUserPromotion(userMail, promotionId);
+			if (user.getIsAdmin()) { // the admin wants to change the promotion of a student
+				String studentMail = json.get("studentMail").asText();
+				
+				User student = ur.findUserByMail(studentMail).get(0);
+				if (student.getIsAdmin()) { // the admin tries to set a promotion to an admin account : not allowed
+					return new ResponseEntity<Object>(Protocol.SERVER_LOGIC_ERROR, HttpStatus.BAD_REQUEST);
+				} else {
+					return ul.updateUserPromotion(student, promotionId);
+				}
+				
+				
+			} else { // a student wants to change its own promotion
+				return ul.updateUserPromotion(user, promotionId);
+			}
 			
-			// return the isAdmin field from the user
-			return new ResponseEntity<Object>(null, HttpStatus.OK);
 		} catch (APIException e) {
+			System.out.println("error : " + e.getResponseEntity().getBody());
 			// else, the user is not properly connected.
 			return e.getResponseEntity();
 		} catch (Exception e) {
@@ -289,15 +296,6 @@ public class UserService {
 			e.printStackTrace();
 			return new ResponseEntity<Object>(Protocol.INVALID_ARGUMENT, HttpStatus.BAD_REQUEST);
 		}
-		
-		/*
-		 * 
-		 * cas 1 : un étudiant change lui même son groupe
-		 * rawUpdateBody : {groupId : 8O34NFUN3}
-		 * 
-		 * cas 2 : l'admin change le groupe d'un étudiant
-		 * rawUpdateBody : {groupId : 8O34NFUN3, mail: "yann.cotineau"}
-		 */
 		 
 	}
 
@@ -317,6 +315,38 @@ public class UserService {
 		} catch (APIException e) {
 			// else, the user is not properly connected.
 			return e.getResponseEntity();
+		}
+	}
+
+	public ResponseEntity<Object> getAllStudents() {
+		try {
+			// checking that user is properly connected
+			String userMail = AuthManager.getLoggedInUserMailFromAccessToken(req.getCookies(), false);
+			
+			// if so, get the user infos from the database
+			User user = ur.findUserByMail(userMail).get(0);
+			
+			if (user.getIsAdmin()) { // an admin wants to retrieve all students
+				
+				
+				List<User> allStudents = ur.findAllStudents();
+				// we do not want to send the password to the frontend.
+				for (User student : allStudents) {
+					student.setPassword("");
+				}
+				
+				// return the result.
+				return new ResponseEntity<Object>(allStudents, HttpStatus.OK);
+				
+			} else { // a student cannot do that.
+				return new ResponseEntity<Object>(Protocol.NOT_ADMIN_USER, HttpStatus.FORBIDDEN);
+				
+			}
+		} catch (APIException e) {
+			return e.getResponseEntity();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Object>(Protocol.INVALID_ARGUMENT, HttpStatus.BAD_REQUEST);
 		}
 	}
 	

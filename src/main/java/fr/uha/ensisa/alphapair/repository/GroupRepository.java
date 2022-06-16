@@ -33,6 +33,10 @@ public interface GroupRepository extends JpaRepository<Group, String> {
 	@Modifying
 	@Query("UPDATE Group SET isLocked=?2 WHERE id=?1")
 	void setGroupLocked(String groupId, boolean isLocked);
-
+	
+	@Transactional 
+	@Modifying
+	@Query("UPDATE Group SET choices=?2 WHERE id=?1")
+	void setGroupChoices(String groupId, List<String> choices);
 	
 }

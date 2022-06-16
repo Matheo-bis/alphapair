@@ -27,8 +27,20 @@ public class GroupController {
 		return gs.getPromotionGroups(id);
 	}
 	
+	@GetMapping("/groups/{id}")
+	public ResponseEntity<Object> getGroup(@PathVariable String id) {
+		return gs.getGroup(id);
+	}
+	
 	@PutMapping("/groups/{id}/setlocked")
 	public ResponseEntity<Object> setGroupLocked(@PathVariable String id, @RequestBody String isLockedRaw) {
 		return gs.setGroupLocked(id, isLockedRaw);
 	}
+	
+	@PutMapping("/groups/{id}/setchoices")
+	public ResponseEntity<Object> setGroupChoices(@RequestBody String choicesRaw) {
+		return gs.setGroupChoices(choicesRaw);
+	}
+	
+	
 }

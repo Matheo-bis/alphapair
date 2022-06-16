@@ -56,4 +56,9 @@ public class PromotionController {
 	public ResponseEntity<Object> generatePromotionAssignment(@PathVariable String id) {
 		return ps.generatePromotionAssignment(id);
 	}
+	
+	@GetMapping("/promotions/{id}/students")
+	public ResponseEntity<Object> getPromotionStudents(@PathVariable String id) {
+		return ps.getPromotionStudents(id);
+	}
 }
