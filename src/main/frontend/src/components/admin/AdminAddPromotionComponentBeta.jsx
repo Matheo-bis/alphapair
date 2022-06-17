@@ -4,7 +4,7 @@ import PromotionService from '../../services/PromotionService';
 import withRouter from '../Router';
 
 
-class AdminAddPromotionComponent extends Component {
+class AdminAddPromotionComponentBeta extends Component {
     
     constructor(props) {
         super(props);
@@ -112,4 +112,4 @@ class AdminAddPromotionComponent extends Component {
     }
 }
 
-export default withRouter(AdminAddPromotionComponent);
+export default withRouter(AdminAddPromotionComponentBeta);
