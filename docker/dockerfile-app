@@ -1,0 +1,16 @@
+FROM maven
+EXPOSE 8080
+WORKDIR $MAVEN_HOME
+ENTRYPOINT [ "./docker-entrypoint.sh" ]
+CMD ["mvn", "spring-boot:run"]
+ADD docker/docker-entrypoint.sh .
+ADD docker/wait-for-it.sh .
+RUN chmod +x ./wait-for-it.sh ./docker-entrypoint.sh
+ADD pom.xml .
+ADD src src
+ENV DOMAIN=192.168.1.16
+ENV DB_HOST=alphapair-db
+RUN sed -i s/localhost/${DOMAIN}/ src/main/frontend/src/services/Protocol.js
+RUN sed -i s/localhost/${DOMAIN}/ src/main/java/fr/uha/ensisa/alphapair/security/CookieManager.java
+RUN sed -i s/localhost/${DB_HOST}/ src/main/resources/application.properties
+RUN mvn clean install

@@ -1,8 +1,8 @@
 import axios from "axios";
 import Protocol from "./Protocol";
 
-const GET_CONTENT_URL = "http://localhost:8080/api/v1/content";
-const GET_NEW_TOKENS_URL = "http://localhost:8080/api/v1/getnewtokens";
+const GET_CONTENT_URL = Protocol.ADDRESS+"/api/v1/content";
+const GET_NEW_TOKENS_URL = Protocol.ADDRESS+"/api/v1/getnewtokens";
 
 class ContentService {
     getContent = (body, callback) => {

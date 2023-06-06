@@ -1,7 +1,8 @@
 import axios from "axios";
 import ContentService from "./ContentService";
+import Protocol from "./Protocol";
 
-const SUBJECTS_URL = "http://localhost:8080/api/v1/promotions";
+const SUBJECTS_URL = Protocol.ADDRESS+"/api/v1/promotions";
 
 class SubjectService {
 

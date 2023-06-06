@@ -1,7 +1,9 @@
 import axios from "axios";
 import ContentService from "./ContentService";
+import Protocol from "./Protocol";
 
-const PROMOTIONS_URL = "http://localhost:8080/api/v1/promotions";
+
+const PROMOTIONS_URL = Protocol.ADDRESS+"/api/v1/promotions";
 
 class PromotionService {
     addPromotion = (promotion, callback) => {

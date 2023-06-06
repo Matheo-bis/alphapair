@@ -1,9 +1,10 @@
 import axios from "axios";
 import ContentService from "./ContentService";
+import Protocol from "./Protocol";
 
-const GROUPS_URL = "http://localhost:8080/api/v1/promotions";
-const SET_LOCKED_URL = "http://localhost:8080/api/v1/groups";
-const SET_CHOICES_URL = "http://localhost:8080/api/v1/groups";
+const GROUPS_URL = Protocol.ADDRESS+"/api/v1/promotions";
+const SET_LOCKED_URL = Protocol.ADDRESS+"/api/v1/groups";
+const SET_CHOICES_URL = Protocol.ADDRESS+"/api/v1/groups";
 
 class GroupService {
 

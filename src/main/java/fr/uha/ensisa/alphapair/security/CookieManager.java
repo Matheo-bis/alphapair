@@ -15,13 +15,14 @@ public class CookieManager {
 	
 	public static final String ACCESS_TOKEN_COOKIE_NAME = "access_token";
 	public static final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
+	public static final String DOMAIN = "localhost";
 	
 	public static Cookie addAuthCookie(String cookieName, String token) {
 		Cookie cookie = new Cookie(cookieName, token);
 		cookie.setMaxAge(365 * 24 * 60 * 60); // expires in 1 year
-		cookie.setSecure(true);
+		cookie.setSecure(false);
 		cookie.setHttpOnly(true);
-		cookie.setDomain("localhost");
+		cookie.setDomain(DOMAIN);
 		cookie.setPath("/"); // global cookie accessible every where
 
 		return cookie;
@@ -30,9 +31,9 @@ public class CookieManager {
 	public static Cookie removeAuthCookie(String cookieName) {
 		Cookie cookie = new Cookie(cookieName, null);
 		cookie.setMaxAge(0);
-		cookie.setSecure(true);
+		cookie.setSecure(false);
 		cookie.setHttpOnly(true);
-		cookie.setDomain("localhost");
+		cookie.setDomain(DOMAIN);
 		cookie.setPath("/"); // global cookie accessible every where
 
 		return cookie;

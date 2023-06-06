@@ -2,16 +2,16 @@ import axios from "axios";
 import ContentService from "./ContentService";
 import Protocol from "./Protocol";
 
-const SIGNUP_URL = "http://localhost:8080/api/v1/signup";
-const LOGIN_URL = "http://localhost:8080/api/v1/login";
-const IS_LOGGED_URL = "http://localhost:8080/api/v1/islogged";
-const LOGOUT_URL = "http://localhost:8080/api/v1/logout";
-const IS_ADMIN_URL = "http://localhost:8080/api/v1/isadmin";
-const IS_STUDENT_PROMLESS_URL = "http://localhost:8080/api/v1/isstudentpromless";
-const UPDATE_PROMOTION_URL = "http://localhost:8080/api/v1/users/promotion";
-const UPDATE_GROUP_URL = "http://localhost:8080/api/v1/users/group";
-const GET_SELF_URL = "http://localhost:8080/api/v1/users/self";
-const GET_ALL_STUDENTS_URL = "http://localhost:8080/api/v1/users/students";
+const SIGNUP_URL = Protocol.ADDRESS+"/api/v1/signup";
+const LOGIN_URL = Protocol.ADDRESS+"/api/v1/login";
+const IS_LOGGED_URL = Protocol.ADDRESS+"/api/v1/islogged";
+const LOGOUT_URL = Protocol.ADDRESS+"/api/v1/logout";
+const IS_ADMIN_URL = Protocol.ADDRESS+"/api/v1/isadmin";
+const IS_STUDENT_PROMLESS_URL = Protocol.ADDRESS+"/api/v1/isstudentpromless";
+const UPDATE_PROMOTION_URL = Protocol.ADDRESS+"/api/v1/users/promotion";
+const UPDATE_GROUP_URL = Protocol.ADDRESS+"/api/v1/users/group";
+const GET_SELF_URL = Protocol.ADDRESS+"/api/v1/users/self";
+const GET_ALL_STUDENTS_URL = Protocol.ADDRESS+"/api/v1/users/students";
 
 class UserService {
     userSignup(user, history) {

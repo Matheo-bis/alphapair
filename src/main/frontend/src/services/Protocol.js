@@ -1,4 +1,6 @@
 const Protocol = {
+	ADDRESS				: "http://localhost:8080",
+
     MISSING_TOKEN 		: 1,
 	INVALID_TOKEN 		: 2,
 	EXPIRED_TOKEN 		: 3,

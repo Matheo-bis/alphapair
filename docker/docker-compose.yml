@@ -1,0 +1,23 @@
+version: '3.7'
+networks:
+  dbnw:
+services:
+  alphapair-db:
+    image: alphapair-db
+    build:
+      context: ..
+      dockerfile: docker/dockerfile-db
+    networks:
+      - dbnw
+
+  alphapair:
+    image: alphapair-app
+    build:
+      context: ..
+      dockerfile: docker/dockerfile-app
+    depends_on:
+      - alphapair-db
+    networks:
+      - dbnw
+    ports:
+      - 8080:8080
