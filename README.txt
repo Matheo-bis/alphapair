@@ -18,7 +18,7 @@ Lancer le projet (sans docker):
 3) Récupérer le projet sur Github à l'aide de la commande :
 	- git clone https://github.com/Matheo-bis/alphapair.git
 
-4) Sans src/main/frontend/src/services/Protocol.js et src/main/java/fr/uha/ensisa/alphapair/security/CookieManager.java, remplacer "localhost" par le nom de domaine (ou addresse IP le cas échéant) sur laquelle l'application sera déployée.
+4) Dans src/main/frontend/src/services/Protocol.js et src/main/java/fr/uha/ensisa/alphapair/security/CookieManager.java, remplacer "localhost" par le nom de domaine (ou addresse IP le cas échéant) sur laquelle l'application sera déployée.
 
 5) Dans le répertoire /alphapair (là où se trouve le fichier pom.xml), lancer les commandes suivantes :
 		- mvn clean install (cette commande peut prendre environ 5 minutes, elle installe tous les modules React nécessaires)
